@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Labb2ProgTemplate
+﻿namespace Labb2ProgTemplate
 {
     public class Shop
     {
@@ -14,37 +8,44 @@ namespace Labb2ProgTemplate
 
         public Shop()
         {
-            
+            Products = new List<Product>()
+            {
+                new Product(){Name = "Banan", Price = 10.0},
+                new Product(){Name = "Snigel", Price = 25.99},
+                new Product(){Name = "Kräfta", Price = 86.0}
+
+            };
         }
 
         public void MainMenu()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Välkommen till min butik!");
+            
         }
 
         private void Login()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void Register()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void ShopMenu() 
         {
-            throw new NotImplementedException();
+            
         }
 
         private void ViewCart()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void Checkout()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
