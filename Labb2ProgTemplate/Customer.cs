@@ -31,9 +31,15 @@
             Cart.Remove(product);
         }
         
-        public double CartTotal()
+        public double CartTotal(Customer customer)
         {
-            throw new NotImplementedException();
+            var totalPrice = 0.0;
+
+            foreach (var product in customer.Cart)
+            {
+                totalPrice += product.Price;
+            }
+            return totalPrice;
         }
     }
 }

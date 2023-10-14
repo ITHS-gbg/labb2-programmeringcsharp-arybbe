@@ -67,7 +67,7 @@
                                     if (currentCustomer != null)
                                     {
                                         Console.WriteLine($"Inloggad som: {currentCustomer.Name}");
-                                        ShopMenu();
+                                        ShopMenu(currentCustomer);
                                         //Implementera shop meny här
 
                                     }
@@ -127,33 +127,62 @@
             }
         }
 
-        private void ShopMenu()
+        private void ShopMenu(Customer customer)
         {
             while (true)
             {
-                Console.WriteLine("Välj vilken produkt du vill lägga till i kundvagnen och hur många.");
+                Thread.Sleep(2000);
+                Console.Clear();
+                Console.WriteLine("Välj vilken produkt du vill lägga till i kundvagnen eller tryck enter för att gå vidare..");
                 Console.WriteLine($"1. {Products[0].Name}: {Products[0].Price}kr / st");
                 Console.WriteLine($"2. {Products[1].Name}: {Products[1].Price}kr / st");
                 Console.WriteLine($"3. {Products[2].Name}: {Products[2].Price}kr / st");
 
+                string toCartToCheckOutOrKeepBuying = "";
                 string productChoice = Console.ReadLine();
 
-                if (productChoice == "1")
+                switch (productChoice)
                 {
-
+                    case "1":
+                        customer.AddToCart(Products[0]);
+                        break;
+                    case "2":
+                        customer.AddToCart(Products[1]);
+                        break;
+                    case "3":
+                        customer.AddToCart(Products[2]);
+                        break;
+                    default:
+                        Console.WriteLine("Du valde ingen produkt!");
+                        break;
                 }
 
+                if (productChoice == "")
+                {
+                    
+                }
 
+                foreach (var product in customer.Cart)
+                {
+                    Console.WriteLine(product.Name);
+                }
             }
             
         }
 
-        private void ViewCart()
+        private void ViewCart(Customer customer)
         {
-            
+            customer.Cart.Sort();
+            double totalPrice;
+            foreach (var product in customer.Cart)
+            {
+                var amountOfProducts = product;  
+
+                Console.WriteLine($"{product.Name} ");
+            }
         }
 
-        private void Checkout()
+        private void Checkout(Customer customer)
         {
 
         }
