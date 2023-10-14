@@ -18,17 +18,17 @@
 
         public bool CheckPassword(string password)
         {
-            throw new NotImplementedException();
+            return Password == password;
         }
 
         public void AddToCart(Product product)
         {
-            throw new NotImplementedException();
+            Cart.Add(product);
         }
 
         public void RemoveFromCart(Product product) 
         {
-            throw new NotImplementedException();
+            Cart.Remove(product);
         }
         
         public double CartTotal()

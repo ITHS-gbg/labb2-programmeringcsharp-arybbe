@@ -6,30 +6,30 @@
 
         private List<Product> Products { get; set; }
 
-        public Dictionary<string, string> Customers { get; set; }
+        public Dictionary<string, Customer> Customers { get; set; } = new();
 
         public Shop()
         {
-            Products?.AddRange(new List<Product>
+            Products = new List<Product>()
             {
-                new (){Name = "Banan", Price = 10.0},
-                new (){Name = "Snigel", Price = 25.99},
-                new (){Name = "Kräfta", Price = 86.0}
-
-            });
-
-            Customers = new Dictionary<string, string>
-            {
-                { "Knatte", "123" },
-                { "Fnatte", "321" },
-                { "Tjatte", "213" }
+                new() { Name = "Banan", Price = 10.0 },
+                new() { Name = "Snigel", Price = 25.99 },
+                new() { Name = "Kräfta", Price = 86.0 }
             };
+
+            Customers.Add("Knatte", new Customer("Knatte", "123"));
+            Customers.Add("Fnatte", new Customer("Fnatte", "321"));
+            Customers.Add("Tjatte", new Customer("Tjatte", "213"));
         }
+
+        
+
 
         public void MainMenu()
         {
             while (true)
             {
+                Console.Clear();
                 Console.WriteLine("Välkommen till min butik!");
                 Console.WriteLine("1. Registrera ny kund");
                 Console.WriteLine("2. Logga in");
@@ -49,18 +49,39 @@
                     case "2":
                         while (true)
                         {
+                            Console.Clear();
                             Console.Write("Ange användarnamn: ");
                             string usernameLogin = Console.ReadLine();
                             Console.Write("Ange lösenord: ");
                             string passwordLogin = Console.ReadLine();
-                            var currentCustomer = Login(usernameLogin, passwordLogin);
 
-                            if (currentCustomer != null)
+                            var customerFound = false;
+
+                            foreach (var customersValue in Customers.Values)
                             {
-                                Console.WriteLine($"Inloggad som kund: {currentCustomer.Value}");
+                                if (customersValue.Name == usernameLogin)
+                                {
+                                    customerFound = true;
+                                    var currentCustomer = Login(usernameLogin, passwordLogin);
 
-                                break;
+                                    if (currentCustomer != null)
+                                    {
+                                        Console.WriteLine($"Inloggad som: {currentCustomer.Name}");
+                                        ShopMenu();
+                                        //Implementera shop meny här
+
+                                    }
+                                    break;
+                                }
                             }
+
+                            if (!customerFound)
+                            {
+                                Console.WriteLine("Användare finns inte. Försök igen!");
+                                Thread.Sleep(2000);
+                            }
+                            break;
+                            
                             
                         }
                         break;
@@ -76,40 +97,66 @@
 
         }
 
-        private KeyValuePair<string, string>? Login(string name, string password)
+        private Customer Login(string name, string password)
         {
-            foreach (var customer in Customers)
+            if (Customers.TryGetValue(name, out Customer customer))
             {
-                if (Customers.ContainsKey(name) && Customers.ContainsValue(password))
+                if (customer.CheckPassword(password))
                 {
                     return customer;
                 }
             }
 
-            Console.WriteLine("Fel användarnamn eller lösenord!");
+            Console.WriteLine("Fel lösenord. Försök igen!");
+            Thread.Sleep(2000);
             return null;
         }
 
         private void Register(string name, string password)
         {
-            CurrentCustomer = new Customer(name, password);
-            Customers.Add(name, password);
-            Console.WriteLine("Du är registrerad!");
+            if (Customers.ContainsKey(name))
+            {
+                Console.WriteLine("Användarnamn finns redan!");
+            }
+            else
+            {
+                var customer = new Customer(name, password);
+                Customers.Add(name, customer);
+                Console.WriteLine("Kund registrerad!");
+                Thread.Sleep(2000);
+            }
         }
 
         private void ShopMenu()
         {
+            while (true)
+            {
+                Console.WriteLine("Välj vilken produkt du vill lägga till i kundvagnen och hur många.");
+                Console.WriteLine($"1. {Products[0].Name}: {Products[0].Price}kr / st");
+                Console.WriteLine($"2. {Products[1].Name}: {Products[1].Price}kr / st");
+                Console.WriteLine($"3. {Products[2].Name}: {Products[2].Price}kr / st");
 
+                string productChoice = Console.ReadLine();
+
+                if (productChoice == "1")
+                {
+
+                }
+
+
+            }
+            
         }
 
         private void ViewCart()
         {
-
+            
         }
 
         private void Checkout()
         {
 
         }
+
     }
 }
