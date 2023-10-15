@@ -1,4 +1,6 @@
-﻿namespace Labb2ProgTemplate
+﻿using System.Text;
+
+namespace Labb2ProgTemplate
 {
     public class Customer
     {
@@ -9,11 +11,17 @@
         private List<Product> _cart;
         public List<Product> Cart { get { return _cart; } }
 
+
         public Customer(string name, string password)
         {
             Name = name;
             Password = password;
             _cart = new List<Product>();
+        }
+
+        public override string ToString()
+        {
+            return null; //BEHÖVER FIXA TOSTRING
         }
 
         public bool CheckPassword(string password)
@@ -41,5 +49,7 @@
             }
             return totalPrice;
         }
+
+        
     }
 }

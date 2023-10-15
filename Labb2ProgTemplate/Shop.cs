@@ -13,8 +13,8 @@
             Products = new List<Product>()
             {
                 new() { Name = "Banan", Price = 10.0 },
-                new() { Name = "Snigel", Price = 25.99 },
-                new() { Name = "Kräfta", Price = 86.0 }
+                new() { Name = "Snigel", Price = 25.0 },
+                new() { Name = "Kräfta", Price = 85.0 }
             };
 
             Customers.Add("Knatte", new Customer("Knatte", "123"));
@@ -66,9 +66,48 @@
 
                                     if (currentCustomer != null)
                                     {
-                                        Console.WriteLine($"Inloggad som: {currentCustomer.Name}");
-                                        ShopMenu(currentCustomer);
-                                        //Implementera shop meny här
+                                        while (true)
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine($"Inloggad som: {currentCustomer.Name}");
+                                            Console.WriteLine("Välj att handla, gå till kundvagn eller gå till kassan!");
+                                            Console.WriteLine("1. Handla");
+                                            Console.WriteLine("2. Kundvagn");
+                                            Console.WriteLine("3. Gå till Kassan");
+                                            Console.WriteLine("4. Logga ut");
+
+                                            string customerChoice = Console.ReadLine();
+
+                                            if (customerChoice == "1")
+                                            {
+                                                ShopMenu(currentCustomer);
+                                            }
+
+                                            if (customerChoice == "2")
+                                            {
+                                                Console.Clear();
+                                                ViewCart(currentCustomer);
+                                                Console.WriteLine("Tryck valfri knapp för att gå vidare.");
+                                                Console.ReadKey();
+                                                RemoveProductsMenu(currentCustomer);
+                                                
+                                            }
+
+                                            if (customerChoice == "3")
+                                            {
+                                                Console.Clear();
+                                                Checkout(currentCustomer); //BEHÖVER FIXA CHECKOUT METODEN, GÅ NER
+                                                Console.WriteLine();
+                                                Console.WriteLine("Betalar och avslutar!");
+                                                return;
+                                            }
+
+                                            if (customerChoice == "4")
+                                            {
+                                                break;
+                                            }
+                                        }
+                                        
 
                                     }
                                     break;
@@ -77,7 +116,7 @@
 
                             if (!customerFound)
                             {
-                                Console.WriteLine("Användare finns inte. Försök igen!");
+                                Console.WriteLine("Användare finns inte. Försök igen eller registrera ny kund!");
                                 Thread.Sleep(2000);
                             }
                             break;
@@ -131,15 +170,18 @@
         {
             while (true)
             {
-                Thread.Sleep(2000);
                 Console.Clear();
                 Console.WriteLine("Välj vilken produkt du vill lägga till i kundvagnen eller tryck enter för att gå vidare..");
                 Console.WriteLine($"1. {Products[0].Name}: {Products[0].Price}kr / st");
                 Console.WriteLine($"2. {Products[1].Name}: {Products[1].Price}kr / st");
                 Console.WriteLine($"3. {Products[2].Name}: {Products[2].Price}kr / st");
 
-                string toCartToCheckOutOrKeepBuying = "";
                 string productChoice = Console.ReadLine();
+                
+                if (productChoice == "")
+                {
+                    break;
+                }
 
                 switch (productChoice)
                 {
@@ -153,39 +195,88 @@
                         customer.AddToCart(Products[2]);
                         break;
                     default:
-                        Console.WriteLine("Du valde ingen produkt!");
+                        Console.WriteLine("Välj produkt eller tryck enter..");
                         break;
                 }
 
-                if (productChoice == "")
-                {
-                    
-                }
-
-                foreach (var product in customer.Cart)
-                {
-                    Console.WriteLine(product.Name);
-                }
+                
             }
             
         }
 
         private void ViewCart(Customer customer)
         {
-            customer.Cart.Sort();
-            double totalPrice;
+            Console.WriteLine($"Kundvagn för {customer.Name}:");
+            
+
+            var productCount = new Dictionary<Product, int>();
+
             foreach (var product in customer.Cart)
             {
-                var amountOfProducts = product;  
-
-                Console.WriteLine($"{product.Name} ");
+                
+                
+                if (productCount.ContainsKey(product))
+                {
+                    productCount[product] += 1;
+                }
+                else
+                {
+                    productCount[product] = 1;
+                }
             }
+
+            foreach (var kvp in productCount)
+            {
+                var product = kvp.Key;
+                var count = kvp.Value;
+                double subTotal = product.Price * count;
+                
+
+                Console.WriteLine($"{product.Name} {count}st {product.Price}kr/st = {subTotal}kr");
+            }
+
+            Console.WriteLine($"Totalt: {customer.CartTotal(customer)}kr");
         }
 
         private void Checkout(Customer customer)
         {
-
+            Console.WriteLine(customer); //BEHÖVER FIXA
         }
 
+
+        private void RemoveProductsMenu(Customer customer)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Välj vilken produkt du vill ta bort i kundvagnen eller tryck enter för att gå vidare..");
+                ViewCart(customer);
+
+                string productChoice = Console.ReadLine();
+
+                if (productChoice == "")
+                {
+                    break;
+                }
+
+                switch (productChoice)
+                {
+                    case "Banan":
+                        customer.RemoveFromCart(Products[0]);
+                        break;
+                    case "Snigel":
+                        customer.RemoveFromCart(Products[1]);
+                        break;
+                    case "Kräfta":
+                        customer.RemoveFromCart(Products[2]);
+                        break;
+                    default:
+                        Console.WriteLine("Välj produkt eller tryck enter..");
+                        break;
+                }
+
+
+            }
+        }
     }
 }
