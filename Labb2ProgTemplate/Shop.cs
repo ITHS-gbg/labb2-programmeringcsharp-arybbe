@@ -40,6 +40,7 @@
                 switch (choice)
                 {
                     case "1":
+                        Console.Clear();
                         Console.Write("Ange användarnamn: ");
                         string usernameRegistered = Console.ReadLine();
                         Console.Write("Ange lösenord: ");
@@ -62,14 +63,14 @@
                                 if (customersValue.Name == usernameLogin)
                                 {
                                     customerFound = true;
-                                    var currentCustomer = Login(usernameLogin, passwordLogin);
+                                    CurrentCustomer = Login(usernameLogin, passwordLogin);
 
-                                    if (currentCustomer != null)
+                                    if (CurrentCustomer != null)
                                     {
                                         while (true)
                                         {
                                             Console.Clear();
-                                            Console.WriteLine($"Inloggad som: {currentCustomer.Name}");
+                                            Console.WriteLine($"Inloggad som: {CurrentCustomer.Name}");
                                             Console.WriteLine("Välj att handla, gå till kundvagn eller gå till kassan!");
                                             Console.WriteLine("1. Handla");
                                             Console.WriteLine("2. Kundvagn");
@@ -80,25 +81,22 @@
 
                                             if (customerChoice == "1")
                                             {
-                                                ShopMenu(currentCustomer);
+                                                ShopMenu(CurrentCustomer);
                                             }
 
                                             if (customerChoice == "2")
                                             {
                                                 Console.Clear();
-                                                ViewCart(currentCustomer);
+                                                ViewCart(CurrentCustomer);
                                                 Console.WriteLine("Tryck valfri knapp för att gå vidare.");
-                                                Console.ReadKey();
-                                                RemoveProductsMenu(currentCustomer);
+                                                RemoveProductsMenu(CurrentCustomer);
                                                 
                                             }
 
                                             if (customerChoice == "3")
                                             {
                                                 Console.Clear();
-                                                Checkout(currentCustomer); //BEHÖVER FIXA CHECKOUT METODEN, GÅ NER
-                                                Console.WriteLine();
-                                                Console.WriteLine("Betalar och avslutar!");
+                                                Checkout(CurrentCustomer);
                                                 return;
                                             }
 
@@ -206,41 +204,13 @@
 
         private void ViewCart(Customer customer)
         {
-            Console.WriteLine($"Kundvagn för {customer.Name}:");
-            
-
-            var productCount = new Dictionary<Product, int>();
-
-            foreach (var product in customer.Cart)
-            {
-                
-                
-                if (productCount.ContainsKey(product))
-                {
-                    productCount[product] += 1;
-                }
-                else
-                {
-                    productCount[product] = 1;
-                }
-            }
-
-            foreach (var kvp in productCount)
-            {
-                var product = kvp.Key;
-                var count = kvp.Value;
-                double subTotal = product.Price * count;
-                
-
-                Console.WriteLine($"{product.Name} {count}st {product.Price}kr/st = {subTotal}kr");
-            }
-
-            Console.WriteLine($"Totalt: {customer.CartTotal(customer)}kr");
+            Console.WriteLine(customer);
         }
 
         private void Checkout(Customer customer)
         {
-            Console.WriteLine(customer); //BEHÖVER FIXA
+            Console.WriteLine(customer);
+            Console.WriteLine("Betalar och avslutar!");
         }
 
 

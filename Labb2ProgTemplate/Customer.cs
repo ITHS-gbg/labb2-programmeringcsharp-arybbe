@@ -21,7 +21,38 @@ namespace Labb2ProgTemplate
 
         public override string ToString()
         {
-            return null; //BEHÖVER FIXA TOSTRING
+            string output = string.Empty;
+            output += $"Kundvagn för {Name}: \n";
+
+            var productCount = new Dictionary<Product, int>();
+
+            foreach (var product in Cart)
+            {
+
+
+                if (productCount.ContainsKey(product))
+                {
+                    productCount[product] += 1;
+                }
+                else
+                {
+                    productCount[product] = 1;
+                }
+            }
+
+            foreach (var kvp in productCount)
+            {
+                var product = kvp.Key;
+                var count = kvp.Value;
+                double subTotal = product.Price * count;
+
+
+                output += $"{product.Name} {count}st {product.Price}kr/st = {subTotal}kr\n";
+            }
+
+            output += $"Totalt: {CartTotal()}kr\n";
+
+            return output;
         }
 
         public bool CheckPassword(string password)
@@ -39,17 +70,16 @@ namespace Labb2ProgTemplate
             Cart.Remove(product);
         }
         
-        public double CartTotal(Customer customer)
+        public double CartTotal()
         {
             var totalPrice = 0.0;
 
-            foreach (var product in customer.Cart)
+            foreach (var product in Cart)
             {
                 totalPrice += product.Price;
             }
             return totalPrice;
         }
 
-        
     }
 }
